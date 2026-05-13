@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>音乐播放器</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+    
+    <style>
+        /* 极简工业风UI设计 */
+        body { 
+            background: #000; 
+            color: #fff; 
+            text-align: center; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h2 { margin-top: 40px; margin-bottom: 30px; font-weight: normal; font-size: 1.2rem; color: #aaa; }
+        
+        .btn-group { width: 100%; max-width: 400px; }
+        
+        button { 
+            width: 100%; 
+            margin-bottom: 15px; 
+            padding: 18px; 
+            background: transparent; 
+            border: 1px solid #444; 
+            color: #fff; 
+            font-size: 1.1rem; 
+            letter-spacing: 2px;
+            transition: all 0.1s;
+        }
+        /* 按下时的闪烁反馈 */
+        button:active { background: #fff; color: #000; }
+    </style>
+</head>
+<body>
+
+    <h2>戴上耳机，今天出门时，你是哪种状态？</h2>
+
+    <div class="btn-group">
+        <button onclick="sendSignal('emo')">[ 想很多 ]</button>
+        <button onclick="sendSignal('trap')">[ 暴走 ]</button>
+        <button onclick="sendSignal('pop')">[ 漫步 ]</button>
+        <button onclick="sendSignal('hyperpop')">[ 爽 ]</button>
+        <button onclick="sendSignal('ambient')">[ 飘 ]</button>
+        <button onclick="sendSignal('postpunk')">[ 鱿鱼 ]</button>
+    </div>
+
+    <script>
+        // ⚠️ 第 1 步：把这里替换成你刚才在 Firebase 拿到的真实配置！
+       const firebaseConfig = {
+  apiKey: "AIzaSyBwmpmsD7of5d7wfoxhgg1IPIC9aPhyOJA",
+  authDomain: "a-place-of-resonance.firebaseapp.com",
+  databaseURL: "https://a-place-of-resonance-default-rtdb.firebaseio.com",
+  projectId: "a-place-of-resonance",
+  storageBucket: "a-place-of-resonance.firebasestorage.app",
+  messagingSenderId: "192031970906",
+  appId: "1:192031970906:web:c0e7423716ed2c37be2a63",
+  measurementId: "G-5521DXMT49"
+};
+
+        // 初始化 Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // 发送信号的核心函数
+        function sendSignal(moodName) {
+            // 往数据库的 'currentMood' 字段写入你按下的那个词
+            db.ref('currentMood').set(moodName)
+              .then(() => {
+                  console.log("信号已发射: " + moodName);
+                  // 手机物理震动反馈 (部分苹果手机可能不支持，安卓秒破)
+                  if (navigator.vibrate) navigator.vibrate(50);
+              })
+              .catch((error) => {
+                  alert("发射失败，检查网络或Firebase规则");
+              });
+        }
+    </script>
+</body>
+</html>
