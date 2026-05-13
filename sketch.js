@@ -70,7 +70,7 @@ function setup() {
     });
 }
 function preload() {
-    qrImg = loadImage('assets/qrcodetomusicplayer.png'); 
+    qrImg = loadImage('qrcodetomusicplayer.png'); 
 }
 
 function initSpeechRecognition() {
@@ -133,16 +133,6 @@ function processNewCharacters(chars) {
   }
 }
 
-function handleFile(file) {
-  if (file.type === 'audio') {
-    // 静默加载，加载完成后解锁下一步
-    mySong = loadSound(file.data, () => {
-      isAudioReady = true; 
-    });
-  } else {
-    alert("请选择音频文件！");
-  }
-}
 
 function draw() {
   if (state === -1) drawOpening();
@@ -903,7 +893,7 @@ function switchChannel(mood) {
     }
 
     // 2. 加载新歌
-    let audioPath = `assets/${mood}.mp3`;
+    let audioPath = `${mood}.mp3`;
     console.log("云端指令通过，开始播放:", audioPath);
 
     currentAudio = loadSound(audioPath, () => {
